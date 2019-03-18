@@ -39,7 +39,7 @@ int lcd_discolor[4]={	BLACK,GRAY,BLUE,RED};
 u16 get(int t);
 u16 wave_scan(void);
 extern int YES,num,flag,value_1,exhibition,exhibition_1,acv_flag,esp_back,wifi,Look,esp_reset;
-extern u8  show,interface,res1,my_result[22];
+extern u8  show,interface,res1,my_result[23],k,j;
 extern u32 input_number[11];
 extern u8 USART3_RX_BUF[USART3_MAX_RECV_LEN];
 void image_interface(int m, int n);
@@ -382,7 +382,9 @@ void Showtime_task(void *p_arg)
 			}				
 			if(exhibition_1==1)
 			{
-//			 LCD_ShowString(250,430,400,12,12,my_result);
+			
+				printf("%s\r\n",my_result);	//·¢ËÍÃüÁî
+			 LCD_ShowString(250,430,400,12,12,my_result);
 			 scoreboard();
 			}	  
      }
@@ -468,13 +470,14 @@ void scoreboard(void)
    int first,second,third,i,owner;
 	 int first_ID,second_ID,third_ID;
 	 int s1,t1;
-	 int data_r[21];	
-	if(acv_flag==2&&(my_result[0]=='i'))
+	 int data_r[21];
+	
+	if(acv_flag==2&&k==2&&j==2)
 	{
-	 LCD_ShowString(350,120,100,10,16,"--------->");
-	 for(i=1;i<22;i++)
+	 LCD_ShowString(350,120,100,10,16,"->->->->->");
+	 for(i=0;i<21;i++)
 	 {
-	  data_r[i-1]=(int)(my_result[i]-'0');
+	  data_r[i]=(int)(my_result[i+1]-'0');
  	 }	 
     owner    =data_r[0]*100 +data_r[1]*10 + data_r[2];
     first_ID =data_r[3]*100 +data_r[4]*10 + data_r[5];

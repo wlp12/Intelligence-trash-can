@@ -146,7 +146,7 @@ void USART1_IRQHandler(void)
 #endif
 } 
 
-u8 rev_account = 0;
+u8 rev_account = 0,k,j;
 u8 my_result[22];
 void USART3_IRQHandler(void)
 {
@@ -172,16 +172,29 @@ void USART3_IRQHandler(void)
 	}  
 	if(acv_flag==1)
 	{		
-	my_result[rev_account] = res;
-	if(my_result[0]=='i')   rev_account++;	
-	if(rev_account>=22)
-	 {		
-		rev_account = 0;	
-		acv_flag= 2;
-   }	
-	}   
- 
-}
+	 my_result[rev_account] = res; 	
+	 if(res=='r') 
+	  {  
+	 	 k=1;
+	  }
+	 if(res=='i') 
+	  {  
+		 j=1;
+	  }
+		if(k==1&&j==1)
+		{
+		rev_account++;	
+		if(rev_account>= 22 )
+	  {		
+		 rev_account = 0;	
+		 acv_flag= 2;
+		 k=2;
+		 j=2;
+    }	 				
+		}  
+	}  
+ }
+
 
 
 

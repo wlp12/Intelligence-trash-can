@@ -459,12 +459,12 @@ Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 ARM Macro Assembler    Page 8 
 
 
-erwork --depend=..\obj\cpu_a.d -o..\obj\cpu_a.o -ID:\桌面\项目\Intelligent-Garb
-age-Can\USER\RTE -ID:\MDK514\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\De
-vice\ST\STM32F4xx\Include -ID:\MDK514\ARM\CMSIS\Include -ID:\MDK514\ARM\PACK\Ke
-il\STM32F4xx_DFP\2.9.0\Device\Include --predefine="__UVISION_VERSION SETA 520" 
---predefine="STM32F429xx SETA 1" --list=..\obj\cpu_a.lst ..\UCOSIII\uC-CPU\ARM-
-Cortex-M4\RealView\cpu_a.asm
+erwork --depend=..\obj\cpu_a.d -o..\obj\cpu_a.o -I"D:\桌面\Intelligence trash c
+an\USER\RTE" -ID:\MDK514\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device
+\ST\STM32F4xx\Include -ID:\MDK514\ARM\CMSIS\Include -ID:\MDK514\ARM\PACK\Keil\S
+TM32F4xx_DFP\2.9.0\Device\Include --predefine="__UVISION_VERSION SETA 520" --pr
+edefine="STM32F429xx SETA 1" --list=..\obj\cpu_a.lst ..\UCOSIII\uC-CPU\ARM-Cort
+ex-M4\RealView\cpu_a.asm
 
 
 

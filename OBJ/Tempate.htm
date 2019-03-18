@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Tempate.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Tempate.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Sun Mar 17 21:14:04 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Mon Mar 18 21:23:02 2019
 <BR><P>
 <H3>Maximum Stack Usage =        968 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1054,6 +1054,7 @@ Global Symbols
 <LI><a href="#[551]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TFTLCD_Init
 <LI><a href="#[e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PS_ValidTempleteNum
 <LI><a href="#[c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PS_ReadSysPara
+<LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Showtime_task
 <LI><a href="#[2a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GT9147_Init
 <LI><a href="#[274]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FT5206_Init
 <LI><a href="#[47c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LTDC_Init
@@ -2235,18 +2236,18 @@ Global Symbols
 
 <P><STRONG><a name="[21c]"></a>DROPDOWN_AddKey</STRONG> (Thumb, 128 bytes, Stack size 32 bytes, dropdown.o(i.DROPDOWN_AddKey))
 <BR><BR>[Stack]<UL><LI>Max Depth = 328 + Unknown Stack Size
-<LI>Call Chain = DROPDOWN_AddKey &rArr; DROPDOWN_IncSel &rArr; DROPDOWN_SetSel &rArr; WM_InvalidateWindow &rArr; WM_InvalidateRect &rArr; WM__InvalidateRectEx &rArr; WM__InvalidateRect &rArr;  WM__InvalidateRect (Cycle)
+<LI>Call Chain = DROPDOWN_AddKey &rArr; DROPDOWN_DecSel &rArr; DROPDOWN_SetSel &rArr; WM_InvalidateWindow &rArr; WM_InvalidateRect &rArr; WM__InvalidateRectEx &rArr; WM__InvalidateRect &rArr;  WM__InvalidateRect (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GUI_Unlock
 <LI><a href="#[1df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GUI_Lock
 <LI><a href="#[1d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GUI_ALLOC_UnlockH
 <LI><a href="#[1d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GUI_ALLOC_LockH
-<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_IncSel
 <LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_DecSel
 <LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_Tolower
 <LI><a href="#[221]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN__GetpItemLocked
 <LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN__GetNumItems
 <LI><a href="#[222]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_SetSel
+<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_IncSel
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_Callback
 </UL>
@@ -2397,8 +2398,8 @@ Global Symbols
 <LI><a href="#[1d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GUI_ALLOC_LockH
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_cbDialog_1
-<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_IncSel
 <LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_DecSel
+<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_IncSel
 </UL>
 
 <P><STRONG><a name="[21f]"></a>DROPDOWN_IncSel</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, dropdown.o(i.DROPDOWN_IncSel))
@@ -2458,10 +2459,10 @@ Global Symbols
 <LI><a href="#[1f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_InvalidateWindow
 <LI><a href="#[21d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN__GetNumItems
 </UL>
-<BR>[Called By]<UL><LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_IncSel
-<LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_DecSel
+<BR>[Called By]<UL><LI><a href="#[220]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_DecSel
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_Callback
 <LI><a href="#[21c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_AddKey
+<LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DROPDOWN_IncSel
 </UL>
 
 <P><STRONG><a name="[230]"></a>DROPDOWN__AdjustHeight</STRONG> (Thumb, 66 bytes, Stack size 24 bytes, dropdown.o(i.DROPDOWN__AdjustHeight))
@@ -11293,7 +11294,7 @@ Global Symbols
 <LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Showtime_task
 </UL>
 
-<P><STRONG><a name="[f4]"></a>Showtime_task</STRONG> (Thumb, 542 bytes, Stack size 24 bytes, main.o(i.Showtime_task))
+<P><STRONG><a name="[f4]"></a>Showtime_task</STRONG> (Thumb, 582 bytes, Stack size 24 bytes, main.o(i.Showtime_task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 424 + Unknown Stack Size
 <LI>Call Chain = Showtime_task &rArr; press_FR &rArr; Show_Str_Mid &rArr; Show_Str &rArr; Show_Font &rArr; Get_HzMat &rArr; W25QXX_Read &rArr; SPI5_ReadWriteByte &rArr; HAL_SPI_TransmitReceive &rArr; SPI_WaitOnFlagUntilTimeout
 </UL>
@@ -11311,6 +11312,7 @@ Global Symbols
 <LI><a href="#[549]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;scoreboard
 <LI><a href="#[547]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;press_FR
 <LI><a href="#[195]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
+<LI><a href="#[193]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.start_task)
 </UL>
@@ -11662,7 +11664,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
 </UL>
-<P><STRONG><a name="[79]"></a>USART3_IRQHandler</STRONG> (Thumb, 112 bytes, Stack size 12 bytes, usart3.o(i.USART3_IRQHandler))
+<P><STRONG><a name="[79]"></a>USART3_IRQHandler</STRONG> (Thumb, 138 bytes, Stack size 12 bytes, usart3.o(i.USART3_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = USART3_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
@@ -13980,7 +13982,7 @@ Global Symbols
 <P><STRONG><a name="[9]"></a>read_addr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, usmart.o(i.read_addr))
 <BR>[Address Reference Count : 1]<UL><LI> usmart_config.o(.data)
 </UL>
-<P><STRONG><a name="[549]"></a>scoreboard</STRONG> (Thumb, 594 bytes, Stack size 144 bytes, main.o(i.scoreboard))
+<P><STRONG><a name="[549]"></a>scoreboard</STRONG> (Thumb, 600 bytes, Stack size 144 bytes, main.o(i.scoreboard))
 <BR><BR>[Stack]<UL><LI>Max Depth = 284<LI>Call Chain = scoreboard &rArr; LCD_ShowNum &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint &rArr; LTDC_Draw_Point
 </UL>
 <BR>[Calls]<UL><LI><a href="#[449]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_ShowString

@@ -954,12 +954,12 @@ ARM Macro Assembler    Page 15
               00000200 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=..\obj\startup_stm32f429xx.d -o..\obj\startup_stm32f429xx.o -ID
-:\桌面\项目\Intelligent-Garbage-Can\USER\RTE -ID:\MDK514\ARM\PACK\Keil\STM32F4x
-x_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -ID:\MDK514\ARM\CMSIS\Inc
-lude -ID:\MDK514\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Device\Include --predefine="
-__UVISION_VERSION SETA 520" --predefine="STM32F429xx SETA 1" --list=..\obj\star
-tup_stm32f429xx.lst ..\CORE\startup_stm32f429xx.s
+erwork --depend=..\obj\startup_stm32f429xx.d -o..\obj\startup_stm32f429xx.o -I"
+D:\桌面\Intelligence trash can\USER\RTE" -ID:\MDK514\ARM\PACK\Keil\STM32F4xx_DF
+P\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -ID:\MDK514\ARM\CMSIS\Include
+ -ID:\MDK514\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Device\Include --predefine="__UV
+ISION_VERSION SETA 520" --predefine="STM32F429xx SETA 1" --list=..\obj\startup_
+stm32f429xx.lst ..\CORE\startup_stm32f429xx.s
 
 
 
