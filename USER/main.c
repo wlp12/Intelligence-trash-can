@@ -1,6 +1,5 @@
 #include "sys.h"
 #include "delay.h"
-#include "usart.h"
 #include "led.h"
 #include "key.h"
 #include "tftlcd.h"
@@ -13,7 +12,6 @@
 #include "rtc.h"
 #include "GUI.h"
 #include "WM.h"
-#include "radiodemo.h"
 #include "includes.h"
 #include "DIALOG.h"
 #include "My_gui.h"
@@ -25,25 +23,30 @@
 #include "ff.h"
 #include "exfuns.h"
 #include "string.h"
-#include "usmart.h"
-#include "usart2.h"
-#include "string.h"
 #include "sdio_sdcard.h"
 #include "wifi.h"
 #include "stdlib.h"
+#include "usmart.h"
+#include "usart.h"
+#include "usart2.h"
 #include "usart3.h"
+#include "gifdisplay.h"
+#include "databox.h"
 
-int ID,ID1;
+int key_number,transform;
+int ID,ID1,show_flag;
 int weight[18],WEIGHT[2];
 int lcd_discolor[4]={	BLACK,GRAY,BLUE,RED};
 u16 get(int t);
 u16 wave_scan(void);
 extern int YES,num,flag,value_1,exhibition,exhibition_1,acv_flag,esp_back,wifi,Look,esp_reset;
-extern u8  show,interface,res1,my_result[23],k,j;
+extern u8  show,interface,res1,my_result[23],R_flag,N_flag;
 extern u32 input_number[11];
 extern u8 USART3_RX_BUF[USART3_MAX_RECV_LEN];
+extern DATABOX databox1,databox2;
+extern DATABOX *sptr1;
 void image_interface(int m, int n);
-
+void scoreboard(void);
 
 //Ö¸ÎÆÄ£¿é²¿·Ö
 #define usart2_baund  57600//´®¿Ú2²¨ÌØÂÊ£¬¸ù¾ÝÖ¸ÎÆÄ£¿é²¨ÌØÂÊ¸ü¸Ä
@@ -54,7 +57,7 @@ u16 ValidN;//Ä£¿éÄÚÓÐÐ§Ö¸ÎÆ¸öÊý
 u16 GET_NUM(void);//»ñÈ¡ÊýÖµ
 
 void press_FR(void);//Ë¢Ö¸ÎÆ
-void scoreboard(void);
+//void scoreboard(void);
 
 
 
@@ -81,11 +84,23 @@ CPU_STK TOUCH_TASK_STK[TOUCH_STK_SIZE];
 //touchÈÎÎñ
 void touch_task(void *p_arg);
 
+//°´¼üÈÎÎñ
+//ÉèÖÃÈÎÎñÓÅÏÈ¼¶
+#define KEY_TASK_PRIO 				5
+//ÈÎÎñ¶ÑÕ»´óÐ¡
+#define KEY_STK_SIZE				256
+//ÈÎÎñ¿ØÖÆ¿é
+OS_TCB KeyTaskTCB;
+//ÈÎÎñ¶ÑÕ»
+CPU_STK KEY_TASK_STK[KEY_STK_SIZE];
+//led0ÈÎÎñ
+void key_task(void *p_arg);
+
 //EMWINDEMOÈÎÎñ
 //ÉèÖÃÈÎÎñÓÅÏÈ¼¶
-#define EMWINDEMO_TASK_PRIO			5
+#define EMWINDEMO_TASK_PRIO			6
 //ÈÎÎñ¶ÑÕ»´óÐ¡
-#define EMWINDEMO_STK_SIZE			512
+#define EMWINDEMO_STK_SIZE			1024
 //ÈÎÎñ¿ØÖÆ¿é
 OS_TCB EmwindemoTaskTCB;
 //ÈÎÎñ¶ÑÕ»
@@ -94,7 +109,7 @@ CPU_STK EMWINDEMO_TASK_STK[EMWINDEMO_STK_SIZE];
 void emwindemo_task(void *p_arg);
 
 //ÉèÖÃÈÎÎñÓÅÏÈ¼¶
-#define Showtime_TASK_PRIO			6
+#define Showtime_TASK_PRIO			7
 //ÈÎÎñ¶ÑÕ»´óÐ¡
 #define Showtime_STK_SIZE			1024
 //ÈÎÎñ¿ØÖÆ¿é
@@ -107,7 +122,7 @@ void Showtime_task(void *p_arg);
 
 
 //ÉèÖÃÈÎÎñÓÅÏÈ¼¶
-#define TIME_TASK_PRIO			6
+#define TIME_TASK_PRIO			7
 //ÈÎÎñ¶ÑÕ»´óÐ¡
 #define TIME_STK_SIZE			3000
 //ÈÎÎñ¿ØÖÆ¿é
@@ -119,7 +134,7 @@ void TIME_task_1(void *p_arg);
 
 
 //ÉèÖÃÈÎÎñÓÅÏÈ¼¶
-#define Getdata_TASK_PRIO			6
+#define Getdata_TASK_PRIO			7
 //ÈÎÎñ¶ÑÕ»´óÐ¡
 #define Getdata_STK_SIZE			256
 //ÈÎÎñ¿ØÖÆ¿é
@@ -128,6 +143,18 @@ OS_TCB Getdata_TaskTCB;
 CPU_STK Getdata_TASK_STK[Getdata_STK_SIZE];
 //emwindemo_taskÈÎÎñ
 void Getdata_task(void *p_arg);
+
+//EMWINDEMOÈÎÎñ
+//ÉèÖÃÈÎÎñÓÅÏÈ¼¶
+#define EMWINDEMO_TASK1_PRIO			8
+//ÈÎÎñ¶ÑÕ»´óÐ¡
+#define EMWINDEMO_STK1_SIZE			1024
+//ÈÎÎñ¿ØÖÆ¿é
+OS_TCB EmwindemoTask1TCB;
+//ÈÎÎñ¶ÑÕ»
+CPU_STK EMWINDEMO_TASK1_STK[EMWINDEMO_STK1_SIZE];
+//emwindemo_taskÈÎÎñ
+void emwindemo_task1(void *p_arg1);
 
 
 void image_interface(int m, int n)
@@ -155,19 +182,21 @@ int main(void)
     KEY_Init();                     //³õÊ¼»¯°´¼ü
     PCF8574_Init();                 //³õÊ¼»¯PCF8574
     SDRAM_Init();                   //SDRAM³õÊ¼»¯
-    TFTLCD_Init();  		        //LCD³õÊ¼»¯
+    TFTLCD_Init();  		            //LCD³õÊ¼»¯
 	  TIM2_PWM_Init(500-1,90-1);
-    TP_Init();				        //´¥ÃþÆÁ³õÊ¼»
-	  usart3_init(115200);				//´®¿Ú3³õÊ¼»¯ 
-    usart2_init(usart2_baund);//³õÊ¼»¯´®¿Ú2,ÓÃÓÚÓëÖ¸ÎÆÄ£¿éÍ¨Ñ¶
-	  usmart_dev.init(168);		//³õÊ¼»¯USMART
+    TP_Init();				         //´¥ÃþÆÁ³õÊ¼»
+	  usart3_init(115200);			 //´®¿Ú3³õÊ¼»¯ 
+    usart2_init(usart2_baund); //³õÊ¼»¯´®¿Ú2,ÓÃÓÚÓëÖ¸ÎÆÄ£¿éÍ¨Ñ¶
+	  usmart_dev.init(168);		   //³õÊ¼»¯USMART
 	  PS_StaGPIO_Init();	//³õÊ¼»¯FR¶Á×´Ì¬Òý½Å
 		W25QXX_Init();			//³õÊ¼»¯W25Q128
-    my_mem_init(SRAMIN);		    //³õÊ¼»¯ÄÚ²¿ÄÚ´æ³Ø
-	  my_mem_init(SRAMEX);		    //³õÊ¼»¯Íâ²¿ÄÚ´æ³Ø
-	  my_mem_init(SRAMCCM);		    //³õÊ¼»¯CCMÄÚ´æ³Ø
-	  exfuns_init();			//ÎªfatfsÏà¹Ø±äÁ¿ÉêÇëÄÚ´æ  
+    my_mem_init(SRAMIN);		//³õÊ¼»¯ÄÚ²¿ÄÚ´æ³Ø
+	  my_mem_init(SRAMEX);		//³õÊ¼»¯Íâ²¿ÄÚ´æ³Ø
+	  my_mem_init(SRAMCCM);		//³õÊ¼»¯CCMÄÚ´æ³Ø
+	  exfuns_init();			    //ÎªfatfsÏà¹Ø±äÁ¿ÉêÇëÄÚ´æ  
  	  f_mount(fs[1],"1:",1);  //¹ÒÔØFLASH.
+		f_mount(fs[0],"0:",1); 	//¹ÒÔØSD¿¨ 
+		SD_Init();              //SD¿¨³õÊ¼»¯
     while(font_init()) 			//¼ì²é×Ö¿â
 	  {	    
 		LCD_ShowString(60,50,240,16,16,"Font Error!");
@@ -212,11 +241,13 @@ void start_task(void *p_arg)
     CPU_IntDisMeasMaxCurReset();	
 #endif
 
-#if	OS_CFG_SCHED_ROUND_ROBIN_EN  //µ±Ê¹ÓÃÊ±¼äÆ¬ÂÖ×ªµÄÊ±ºò
-	//Ê¹ÄÜÊ±¼äÆ¬ÂÖ×ªµ÷¶È¹¦ÄÜ,ÉèÖÃÄ¬ÈÏµÄÊ±¼äÆ¬³¤¶È
+#if	OS_CFG_SCHED_ROUND_ROBIN_EN  //µ±Ê¹ÓÃÊ±¼äÆ¬ÂÖ×ªµÄÊ±ºò	//Ê¹ÄÜÊ±¼äÆ¬ÂÖ×ªµ÷¶È¹¦ÄÜ,ÉèÖÃÄ¬ÈÏµÄÊ±¼äÆ¬³¤¶È
+	
       OSSchedRoundRobinCfg(DEF_ENABLED,1,&err);    //Ê¹ÄÜÊ±¼äÆ¬ÂÖ×ªµ÷¶È¹¦ÄÜ,Ê±¼äÆ¬³¤¶ÈÎª1¸öÏµÍ³Ê±ÖÓ½ÚÅÄ£¬¼È1*5=5ms 
-      OSTaskTimeQuantaSet(&Task1_TaskTCB,1,&err);
-//      OSTaskTimeQuantaSet(&TIMETaskTCB,1,&err);	
+    
+//	    OSTaskTimeQuantaSet(&EmwindemoTask1TCB,1,&err);
+//	    OSTaskTimeQuantaSet(&EmwindemoTaskTCB,1,&err);
+	
       OSTaskTimeQuantaSet(&Getdata_TaskTCB,,&err);
       OSTaskTimeQuantaSet(&Showtime_TaskTCB,1,&err);
 #endif		
@@ -225,20 +256,21 @@ void start_task(void *p_arg)
 	GUI_Init();  			//STemWin³õÊ¼»¯
 	WM_MULTIBUF_Enable(1);  //¿ªÆôSTemWin¶à»º³å,RGBÆÁ¿ÉÄÜ»áÓÃµ½
 	OS_CRITICAL_ENTER();	//½øÈëÁÙ½çÇø
-	//STemWin DemoÈÎÎñ	
-	OSTaskCreate((OS_TCB*     )&EmwindemoTaskTCB,		
-				 (CPU_CHAR*   )"Emwindemo task", 		
-                 (OS_TASK_PTR )emwindemo_task, 			
+		//STemWin DemoÈÎÎñ1	
+	OSTaskCreate((OS_TCB*     )&EmwindemoTask1TCB,		
+				 (CPU_CHAR*   )"Emwindemo task1", 		
+                 (OS_TASK_PTR )emwindemo_task1, 			
                  (void*       )0,					
-                 (OS_PRIO	  )EMWINDEMO_TASK_PRIO,     
-                 (CPU_STK*    )&EMWINDEMO_TASK_STK[0],	
-                 (CPU_STK_SIZE)EMWINDEMO_STK_SIZE/10,	
-                 (CPU_STK_SIZE)EMWINDEMO_STK_SIZE,		
+                 (OS_PRIO	  )EMWINDEMO_TASK1_PRIO,     
+                 (CPU_STK*    )&EMWINDEMO_TASK1_STK[0],	
+                 (CPU_STK_SIZE)EMWINDEMO_STK1_SIZE/10,	
+                 (CPU_STK_SIZE)EMWINDEMO_STK1_SIZE,		
                  (OS_MSG_QTY  )0,					
                  (OS_TICK	  )0,  					
                  (void*       )0,					
                  (OS_OPT      )OS_OPT_TASK_STK_CHK|OS_OPT_TASK_STK_CLR,
                  (OS_ERR*     )&err);
+
 	//´¥ÃþÆÁÈÎÎñ
 	OSTaskCreate((OS_TCB*     )&TouchTaskTCB,		
 				 (CPU_CHAR*   )"Touch task", 		
@@ -279,15 +311,74 @@ void start_task(void *p_arg)
                  (void*       )0,					
                  (OS_OPT      )OS_OPT_TASK_STK_CHK|OS_OPT_TASK_STK_CLR,
                  (OS_ERR*     )&err);
-									 
-	OS_TaskSuspend((OS_TCB*)&StartTaskTCB,&err);		//¹ÒÆð¿ªÊ¼ÈÎÎñ			 
-	OS_CRITICAL_EXIT();	//ÍË³öÁÙ½çÇø
+	//°´¼üÈÎÎñ
+	OSTaskCreate((OS_TCB*     )&KeyTaskTCB,		
+				 (CPU_CHAR*   )"Key task", 		
+                 (OS_TASK_PTR )key_task, 			
+                 (void*       )0,					
+                 (OS_PRIO	  )KEY_TASK_PRIO,     
+                 (CPU_STK*    )&KEY_TASK_STK[0],	
+                 (CPU_STK_SIZE)KEY_STK_SIZE/10,	
+                 (CPU_STK_SIZE)KEY_STK_SIZE,		
+                 (OS_MSG_QTY  )0,					
+                 (OS_TICK	  )0,  					
+                 (void*       )0,					
+                 (OS_OPT      )OS_OPT_TASK_STK_CHK|OS_OPT_TASK_STK_CLR,
+                 (OS_ERR*     )&err);                 
+		//STemWin DemoÈÎÎñ	
+	OSTaskCreate((OS_TCB*     )&EmwindemoTaskTCB,		
+				 (CPU_CHAR*   )"Emwindemo task", 		
+                 (OS_TASK_PTR )emwindemo_task, 			
+                 (void*       )0,					
+                 (OS_PRIO	  )EMWINDEMO_TASK_PRIO,     
+                 (CPU_STK*    )&EMWINDEMO_TASK_STK[0],	
+                 (CPU_STK_SIZE)EMWINDEMO_STK_SIZE/10,	
+                 (CPU_STK_SIZE)EMWINDEMO_STK_SIZE,		
+                 (OS_MSG_QTY  )0,					
+                 (OS_TICK	  )0,  					
+                 (void*       )0,					
+                 (OS_OPT      )OS_OPT_TASK_STK_CHK|OS_OPT_TASK_STK_CLR,
+                 (OS_ERR*     )&err);
+								 								 
+	OS_TaskSuspend((OS_TCB*)&StartTaskTCB,&err);		//¹ÒÆð¿ªÊ¼ÈÎÎñ	 						 
+  delay_ms(100);										 
+	OS_CRITICAL_EXIT();	//ÍË³öÁÙ½çÇø	
+	OSTaskSuspend((OS_TCB*)&EmwindemoTask1TCB,&err); //¹ÒÆðÈÎÎñ									 
+}
+
+//°´¼ü´¦ÀíÈÎÎñ
+void key_task(void *pdata)
+{
+	u8 key;
+	OS_ERR err;
+	
+	while(1)
+	{
+		key = KEY_Scan(0);
+		switch(key)
+		{
+			case KEY0_PRES:					
+        key_number++;
+//        if(key_number%2==1)	
+//				{				
+////         OSTaskSuspend((OS_TCB*)&EmwindemoTask1TCB,&err);  //¹ÒÆðÈÎÎñ
+//			   OSTaskResume((OS_TCB*)&EmwindemoTask1TCB,&err);	   //»Ö¸´ÈÎÎñ
+//				}
+//				else
+//				{			
+//			   OSTaskSuspend((OS_TCB*)&EmwindemoTaskTCB,&err);   //¹ÒÆðÈÎÎñ
+////			  OSTaskResume((OS_TCB*) &EmwindemoTask1TCB,&err);	//»Ö¸´ÈÎÎñ
+//				}	
+//				GUI_Clear();
+				break;
+		}
+		OSTimeDlyHMSM(0,0,0,10,OS_OPT_TIME_PERIODIC,&err);//ÑÓÊ±10ms
+	}
 }
 
 //EMWINDEMOÈÎÎñ
 void emwindemo_task(void *p_arg)
 {
-
 	GUI_CURSOR_Show(); 	
 	//¸ü»»Æ¤·ô
 	BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX); 
@@ -302,13 +393,22 @@ void emwindemo_task(void *p_arg)
 	SCROLLBAR_SetDefaultSkin(SCROLLBAR_SKIN_FLEX);
 	SLIDER_SetDefaultSkin(SLIDER_SKIN_FLEX);
 	SPINBOX_SetDefaultSkin(SPINBOX_SKIN_FLEX); 
-
+	GUI_Clear();
 	while(1)
-	{	
+	{		 
 	 my_gui_create();
 	}
 }
-
+//EMWINDEMOÈÎÎñ
+void emwindemo_task1(void *p_arg1)
+{
+//	GUI_CURSOR_Show();
+	GUI_Clear();
+	while(1)
+	{	
+    gifdisplay_demo();
+	}
+}
 //TOUCHÈÎÎñ
 void touch_task(void *p_arg)
 {
@@ -350,41 +450,37 @@ void Showtime_task(void *p_arg)
 	  }	
 	if(interface==4)//½çÃæ4
     {	
-			LCD_ShowxNum(300,300,wifi,4,16,0);
+			LCD_ShowxNum(900,60,wifi,4,16,0);
 	    POINT_COLOR=BLUE; 
-			LCD_ShowString(20,140,300,10,16,"error:");
-      while(PS_HandShake(&AS608Addr))//ÓëAS608Ä£¿éÎÕÊÖ
-      {
-       Show_Str_Mid(20,50,"ÓëÖ¸ÎÆÄ£¿éÎÕÊÖ..",16,240);		  
-      }
-      Show_Str_Mid(20,80,"Í¨Ñ¶³É¹¦!!!",16,240);
+			LCD_ShowString(20,200,300,10,16,"error:");
+      PS_HandShake(&AS608Addr);//ÓëAS608Ä£¿éÎÕÊÖ
+      Show_Str_Mid(20,110,"ÓëÖ¸ÎÆÄ£¿éÎÕÊÖ..",16,240);		   
+      Show_Str_Mid(20,140,"Í¨Ñ¶³É¹¦!!!",16,240);
       str=mymalloc(SRAMIN,30);
       sprintf(str,"²¨ÌØÂÊ:%d   µØÖ·:%x",usart2_baund,AS608Addr);
-      Show_Str(20,110,240,16,(u8*)str,16,0);	
+      Show_Str(20,170,240,16,(u8*)str,16,0);	
 	    ensure=PS_ValidTempleteNum(&ValidN);//¶Á¿âÖ¸ÎÆ¸öÊý
 	    if(ensure!=0x00)     
-			LCD_ShowxNum(80,140,ensure,4,16,0);		
+			LCD_ShowxNum(80,200,ensure,4,16,0);		
 	    ensure=PS_ReadSysPara(&AS608Para);  //¶Á²ÎÊý 
 	    if(ensure==0x00)
 	    {			 
 		   mymemset(str,0,50);
 		   sprintf(str,"¿âÈÝÁ¿:%d    ¶Ô±ÈµÈ¼¶: %d",AS608Para.PS_max-ValidN,AS608Para.PS_level);
-		   Show_Str(20,170,240,16,(u8*)str,24,0);
+		   Show_Str(20,230,240,16,(u8*)str,24,0);
 	     }
 	    else
-		   LCD_ShowxNum(80,140,ensure,4,16,0);					
+		   LCD_ShowxNum(80,230,ensure,4,16,0);					
 	     myfree(SRAMIN,str);    				
 		   press_FR();//Ë¢Ö¸ÎÆ
 			if(interface==4)
 			{ 
-			 LCD_ShowString(60,280,300,10,24,"Owner ID:");
-       LCD_ShowxNum(180,280,ID1,4,24,0);
+			 LCD_ShowString(60,340,300,10,24,"Owner ID:");
+       LCD_ShowxNum(180,340,ID1,4,24,0);
 			}				
 			if(exhibition_1==1)
-			{
-			
-				printf("%s\r\n",my_result);	//·¢ËÍÃüÁî
-			 LCD_ShowString(250,430,400,12,12,my_result);
+			{			
+//			 LCD_ShowString(250,490,400,12,12,my_result);
 			 scoreboard();
 			}	  
      }
@@ -397,12 +493,6 @@ void Getdata_task(void  *p_arg)
 	OS_ERR  err;
 	while(1)
 	 {	 		
-//		 if(esp_back==1)
-//			{
-//			  atk_8266_quit_trans();	//ÍË³öÍ¸´«
-//	      atk_8266_send_cmd("AT+CIPMODE=0","OK",20);   //¹Ø±ÕÍ¸´«Ä£Ê½
-//				esp_back=0;
-//			}
 	  if(interface==4)//½çÃæ4
 		 { 		 
 			 TIM_SetTIM2Compare( 50,1);
@@ -449,16 +539,16 @@ void press_FR(void)
 			ensure=PS_HighSpeedSearch(CharBuffer1,0,AS608Para.PS_max,&seach);
 			if(ensure==0x00)//ËÑË÷³É¹¦
 			{				
-				Show_Str_Mid(0,250,"Ë¢Ö¸ÎÆ³É¹¦",24,240);				
+				Show_Str_Mid(0,310,"Ë¢Ö¸ÎÆ³É¹¦",24,240);				
 				str=mymalloc(SRAMIN,50);
 				ID1=seach.pageID;
 				myfree(SRAMIN,str);
 			}
 			else 
-			LCD_ShowxNum(80,140,ensure,4,16,0);			
+			LCD_ShowxNum(80,200,ensure,4,16,0);			
 	  }
 		else
-		  LCD_ShowxNum(80,140,ensure,4,16,0);
+		  LCD_ShowxNum(80,200,ensure,4,16,0);
 	 PCF8574_WriteBit(BEEP_IO,1);//¹Ø±Õ·äÃùÆ÷
 	 delay_ms(600);
 		
@@ -466,45 +556,43 @@ void press_FR(void)
 }
 
 void scoreboard(void)
-{
+{	
    int first,second,third,i,owner;
 	 int first_ID,second_ID,third_ID;
-	 int s1,t1;
-	 int data_r[21];
-	
-	if(acv_flag==2&&k==2&&j==2)
-	{
-	 LCD_ShowString(350,120,100,10,16,"->->->->->");
-	 for(i=0;i<21;i++)
+	 int s1,t1,data_r[21];
+	 if(acv_flag==2&&(sptr1->funtion_part)==command_1&&(sptr1->address)==Address_1)
 	 {
-	  data_r[i]=(int)(my_result[i+1]-'0');
- 	 }	 
-    owner    =data_r[0]*100 +data_r[1]*10 + data_r[2];
-    first_ID =data_r[3]*100 +data_r[4]*10 + data_r[5];
-	  first    =data_r[6]*100 +data_r[7]*10 + data_r[8];
-	  second_ID=data_r[9]*100 +data_r[10]*10+ data_r[11];
-	  second   =data_r[12]*100+data_r[13]*10+ data_r[14];
-	  third_ID =data_r[15]*100+data_r[16]*10+ data_r[17];
-	  third    =data_r[18]*100+data_r[19]*10+ data_r[20];
+	  LCD_ShowString(350,120,100,10,16,"->->->->->->->");
+	   for(i=0;i<21;i++)
+	   {
+	    data_r[i]=(int)(my_result[i]-'0');		
+ 	   }	 
+     owner    =data_r[0]*100 +data_r[1]*10 + data_r[2];
+     first_ID =data_r[3]*100 +data_r[4]*10 + data_r[5];
+	   first    =data_r[6]*100 +data_r[7]*10 + data_r[8];
+	   second_ID=data_r[9]*100 +data_r[10]*10+ data_r[11];
+	   second   =data_r[12]*100+data_r[13]*10+ data_r[14];
+	   third_ID =data_r[15]*100+data_r[16]*10+ data_r[17];
+	   third    =data_r[18]*100+data_r[19]*10+ data_r[20];
 	 
-	  s1=(int)((second*150)/first);
-	  t1=(int)(( third*150)/first);
-	  LCD_ShowString(470,120,75,10,24,"1st id:");    LCD_ShowNum(550,130, first_ID,5,16);	LCD_Fill(600,120, 600+150, 150,DARKBLUE);  LCD_ShowNum(760,130, first,5,16);		
-	  LCD_ShowString(470,180,75,10,24,"2nd id:");    LCD_ShowNum(550,190,second_ID,5,16);	LCD_Fill(600,180, 600+s1, 210,LIGHTGREEN);LCD_ShowNum(760,190,second,5,16);		
-	  LCD_ShowString(470,240,75,10,24,"3rd id:");    LCD_ShowNum(550,250, third_ID,5,16);	LCD_Fill(600,240, 600+t1, 270,LGRAY);     LCD_ShowNum(760,250, third,5,16);				  
-	  POINT_COLOR=BRRED;
-	 if(owner== first)       LCD_ShowString(480,300,280,10,24,"Best!you are first!");				
-	 else if(owner==second)  LCD_ShowString(480,300,280,10,24,"Nice!you are second!");
-	 else if(owner== third)  LCD_ShowString(480,300,280,10,24,"Good!you are third!");
-	 else  
-	 { 
-		 POINT_COLOR=BLUE;
-		 LCD_ShowString(510,300,100,10,16,"owner score:");
-		 LCD_ShowNum(600,300,owner,5,16);
-		 LCD_ShowString(650,300,200,10,16,"Please keep trying");
-   }
- }
-	else LCD_ShowString(350,120,100,10,16,"achieving");
-
+	   s1=(int)((second*150)/first);
+	   t1=(int)(( third*150)/first);
+	   LCD_ShowString(500,120,75,10,24,"1st id:");    LCD_ShowNum(580,130, first_ID,5,16);	LCD_Fill(630,120, 600+150, 150,DARKBLUE);  LCD_ShowNum(790,130, first,5,16);		
+	   LCD_ShowString(500,180,75,10,24,"2nd id:");    LCD_ShowNum(580,190,second_ID,5,16);	LCD_Fill(630,180, 600+s1, 210,LIGHTGREEN);LCD_ShowNum(790,190,second,5,16);		
+	   LCD_ShowString(500,240,75,10,24,"3rd id:");    LCD_ShowNum(580,250, third_ID,5,16);	LCD_Fill(630,240, 600+t1, 270,LGRAY);     LCD_ShowNum(790,250, third,5,16);				  
+	   POINT_COLOR=BRRED;
+	  if(owner== first)       LCD_ShowString(510,300,280,10,24,"Best!you are first!");				
+	  else if(owner==second)  LCD_ShowString(510,300,280,10,24,"Nice!you are second!");
+	  else if(owner== third)  LCD_ShowString(510,300,280,10,24,"Good!you are third!");
+	  else  
+	  { 
+		  POINT_COLOR=BLUE;
+		  LCD_ShowString(540,300,100,10,16,"owner score:");
+		  LCD_ShowNum(630,300,owner,5,16);
+		  LCD_ShowString(680,300,200,10,16,"Please keep trying");
+    }
+  }
+	 else LCD_ShowString(380,120,100,10,16,"achieving");
 }
+
 

@@ -72,7 +72,6 @@
 ..\obj\main.o: ..\HALLIB\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h
 ..\obj\main.o: ..\HALLIB\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h
 ..\obj\main.o: ..\SYSTEM\delay\delay.h
-..\obj\main.o: ..\SYSTEM\usart\usart.h
 ..\obj\main.o: ..\HARDWARE\LED\led.h
 ..\obj\main.o: ..\HARDWARE\KEY\key.h
 ..\obj\main.o: ..\HARDWARE\LCD\tftlcd.h
@@ -97,7 +96,6 @@
 ..\obj\main.o: ..\EMWIN\STemWin\inc\GUI_Version.h
 ..\obj\main.o: ..\EMWIN\STemWin\inc\WM.h
 ..\obj\main.o: ..\EMWIN\STemWin\inc\WM_GUI.h
-..\obj\main.o: ..\EMWIN_DEMO\radiodemo\radiodemo.h
 ..\obj\main.o: ..\UCOSIII\UCOS-CONFIG\includes.h
 ..\obj\main.o: D:\MDK514\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\main.o: D:\MDK514\ARM\ARMCC\Bin\..\include\ctype.h
@@ -166,8 +164,11 @@
 ..\obj\main.o: ..\FATFS\src\integer.h
 ..\obj\main.o: ..\FATFS\src\ffconf.h
 ..\obj\main.o: ..\FATFS\exfuns\exfuns.h
-..\obj\main.o: ..\USMART\usmart.h
-..\obj\main.o: ..\USMART\usmart_str.h
 ..\obj\main.o: ..\HARDWARE\SDIO\sdio_sdcard.h
 ..\obj\main.o: ..\ATK-ESP8266\wifi\wifi.h
+..\obj\main.o: ..\SYSTEM\usart\usart.h
+..\obj\main.o: ..\USMART\usmart.h
+..\obj\main.o: ..\USMART\usmart_str.h
 ..\obj\main.o: ..\USMART\usart3.h
+..\obj\main.o: ..\EMWIN_DEMO\GIF\gifdisplay.h
+..\obj\main.o: ..\HARDWARE\DATA\databox.h

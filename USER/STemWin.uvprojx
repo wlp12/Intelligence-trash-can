@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING,__FPU_PRESENT=1</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\SDRAM;..\HARDWARE\KEY;..\HARDWARE\TIMER;..\HARDWARE\24CXX;..\HARDWARE\IIC;..\HARDWARE\TOUCH;..\HARDWARE\EXTI;..\HARDWARE\PCF8574;..\HARDWARE\ADC;..\HARDWARE\RTC;..\MALLOC;..\DSP_LIB\Include;..\UCOSIII\uC-CPU;..\UCOSIII\uC-LIB;..\UCOSIII\UCOS-BSP;..\UCOSIII\UCOS-CONFIG;..\UCOSIII\uCOS-III\Source;..\UCOSIII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSIII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSIII\uCOS-III\Ports\ARM-Cortex-M4\Generic\RealView;..\EMWIN\STemWin\inc;..\EMWIN\STemWin\Config;..\EMWIN_DEMO\radiodemo;..\HARDWARE\STMFLASH;..\EMWIN_DEMO\LJT;..\HARDWARE\STMFLASH;..\HARDWARE\usart2;..\HARDWARE\W25QXX;..\HARDWARE\SPI;..\HARDWARE\usart2;..\FATFS;..\HARDWARE\AS608;..\FATFS\exfuns;..\FATFS\doc\en;..\FATFS\exfuns;..\FATFS\doc\img;..\FATFS\doc\ja;..\FATFS\src\option;..\FATFS\src\option;..\FATFS\src;..\HARDWARE\AS608;..\FATFS\src;..\FATFS\src;..\HARDWARE\NAND;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\TEXT;..\ATK-ESP8266\common;..\ATK-ESP8266\wifi;..\USMART;..\USMART</IncludePath>
+              <IncludePath>..\CORE;..\OBJ;..\USER;..\HALLIB\STM32F4xx_HAL_Driver\Inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\HARDWARE\KEY;..\HARDWARE\LCD;..\HARDWARE\SDRAM;..\HARDWARE\KEY;..\HARDWARE\TIMER;..\HARDWARE\24CXX;..\HARDWARE\IIC;..\HARDWARE\TOUCH;..\HARDWARE\EXTI;..\HARDWARE\PCF8574;..\HARDWARE\ADC;..\HARDWARE\RTC;..\MALLOC;..\DSP_LIB\Include;..\UCOSIII\uC-CPU;..\UCOSIII\uC-LIB;..\UCOSIII\UCOS-BSP;..\UCOSIII\UCOS-CONFIG;..\UCOSIII\uCOS-III\Source;..\UCOSIII\uC-CPU\ARM-Cortex-M4\RealView;..\UCOSIII\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\UCOSIII\uCOS-III\Ports\ARM-Cortex-M4\Generic\RealView;..\EMWIN\STemWin\inc;..\EMWIN\STemWin\Config;..\EMWIN_DEMO\radiodemo;..\HARDWARE\STMFLASH;..\EMWIN_DEMO\LJT;..\HARDWARE\STMFLASH;..\HARDWARE\usart2;..\HARDWARE\W25QXX;..\HARDWARE\SPI;..\HARDWARE\usart2;..\FATFS;..\HARDWARE\AS608;..\FATFS\exfuns;..\FATFS\doc\en;..\FATFS\exfuns;..\FATFS\doc\img;..\FATFS\doc\ja;..\FATFS\src\option;..\FATFS\src\option;..\FATFS\src;..\HARDWARE\AS608;..\FATFS\src;..\FATFS\src;..\HARDWARE\NAND;..\HARDWARE\SDIO;..\HARDWARE\NAND;..\TEXT;..\ATK-ESP8266\common;..\ATK-ESP8266\wifi;..\USMART;..\USMART;..\EMWIN_DEMO\EMWIN_PICTURE\BMP;..\EMWIN_DEMO\GIF;..\HARDWARE\DATA</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -738,6 +738,11 @@
               <FileType>1</FileType>
               <FilePath>..\USMART\usart3.c</FilePath>
             </File>
+            <File>
+              <FileName>databox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\DATA\databox.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1068,14 +1073,14 @@
           <GroupName>EMWIN_DEMO</GroupName>
           <Files>
             <File>
-              <FileName>radiodemo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\EMWIN_DEMO\radiodemo\radiodemo.c</FilePath>
-            </File>
-            <File>
               <FileName>My_gui.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\EMWIN_DEMO\LJT\My_gui.c</FilePath>
+            </File>
+            <File>
+              <FileName>gifdisplay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\EMWIN_DEMO\GIF\gifdisplay.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1903,6 +1908,11 @@
               <FileType>1</FileType>
               <FilePath>..\USMART\usart3.c</FilePath>
             </File>
+            <File>
+              <FileName>databox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\DATA\databox.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2282,14 +2292,14 @@
           <GroupName>EMWIN_DEMO</GroupName>
           <Files>
             <File>
-              <FileName>radiodemo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\EMWIN_DEMO\radiodemo\radiodemo.c</FilePath>
-            </File>
-            <File>
               <FileName>My_gui.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\EMWIN_DEMO\LJT\My_gui.c</FilePath>
+            </File>
+            <File>
+              <FileName>gifdisplay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\EMWIN_DEMO\GIF\gifdisplay.c</FilePath>
             </File>
           </Files>
         </Group>

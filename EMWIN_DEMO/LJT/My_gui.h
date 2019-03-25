@@ -4,6 +4,7 @@
 #include "WM.h"
 
 void checkfunction(void);
+void check_and_go(void);
 void my_gui_create(void);//´´½¨GUI
 void read_config(void);
 void auto_config(void);

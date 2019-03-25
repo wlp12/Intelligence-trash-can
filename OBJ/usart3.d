@@ -78,6 +78,7 @@
 ..\obj\usart3.o: ..\SYSTEM\usart\usart.h
 ..\obj\usart3.o: ..\HARDWARE\LCD\tftlcd.h
 ..\obj\usart3.o: D:\MDK514\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\usart3.o: ..\HARDWARE\DATA\databox.h
 ..\obj\usart3.o: ..\UCOSIII\UCOS-CONFIG\includes.h
 ..\obj\usart3.o: D:\MDK514\ARM\ARMCC\Bin\..\include\ctype.h
 ..\obj\usart3.o: D:\MDK514\ARM\ARMCC\Bin\..\include\math.h

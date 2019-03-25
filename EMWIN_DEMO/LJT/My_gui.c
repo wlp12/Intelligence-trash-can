@@ -21,7 +21,7 @@
 
 u32 Show_password[11]={  0,0,0,0,0,0,0,0,0,0,0 };
 u32 input_number[11]= {  0,0,0,0,0,0,0,0,0,0,0 };
-int flag,num,YES,interface=1,f=0;
+int ID2,flag,num,YES,interface=1,f=0;
 int Fraction[9]={0,0,0,0,0,0,0,0,0};
 int exhibition,exhibition_1,acv_flag,value_1,Look,esp_back=0,esp_reset;
 extern int ID1,ID;
@@ -37,8 +37,10 @@ static int standard_pack[8][11]={
  };
 
 void checkfunction(void);
+void check_and_go(void);
 void check_ID(void);
- 
+
+
 WM_HWIN CreateFramewin_1(void);
 WM_HWIN CreateFramewin_2(void);
 WM_HWIN CreateFramewin_3(void);
@@ -46,9 +48,10 @@ WM_HWIN CreateFramewin_4(void);
 WM_HWIN DialoghWin;             //对话框窗口
 radio_struct radio_widg;
  
+ 
 /***************界面一*******************/
 #define ID_BUTTON_13     (GUI_ID_USER + 0x43)
-#define ID_BUTTON_14     (GUI_ID_USER + 0x44)
+#define ID_BUTTON_14     (GUI_ID_USER + 0x49)
 #define ID_DROPDOWN_0    (GUI_ID_USER + 0x02)
 
  
@@ -92,14 +95,14 @@ radio_struct radio_widg;
 #define ID_BUTTON_24     (GUI_ID_USER + 0x33)
 #define ID_BUTTON_25     (GUI_ID_USER + 0x34)
 #define ID_TEXT_7        (GUI_ID_USER + 0x47)
-/***********对话框资源表**************/
+
 //智能垃圾桶的初始页面
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate_1[] = {
   { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0,  0,    0, 1050, 640, 0, 0x64,  0 }, //MY_HOME方框
-	{ BUTTON_CreateIndirect,   "Button",   ID_BUTTON_13,  260,  90,  220, 130, 0,  0x0, 0 },//按键
-  { BUTTON_CreateIndirect,   "Button",   ID_BUTTON_14,  550,  90,  220, 130, 0,  0x0, 0 },//按键
+	{ BUTTON_CreateIndirect,   "Button",   ID_BUTTON_13,  550,  30,  220, 130, 0,  0x0, 0 },//按键
+  { BUTTON_CreateIndirect,   "Button",   ID_BUTTON_14,  550, 200,  220, 130, 0,  0x0, 0 },//按键
 	{ TEXT_CreateIndirect,     "Text",     ID_TEXT_6,     900, 400,  200,  30, 0, 0x64, 0 },	
-  { DROPDOWN_CreateIndirect, "Dropdown", ID_DROPDOWN_0, 550, 220,  220, 200, 0, 0x0 , 0 },
+  { DROPDOWN_CreateIndirect, "Dropdown", ID_DROPDOWN_0, 550, 330,  220, 150, 0, 0x0 , 0 },
 //  { BUTTON_CreateIndirect,   "Ok",       ID_BUTTON_00,  100, 170,  100,	 40},
 };
 
@@ -120,6 +123,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate_2[] = {
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_10,    350, 400, 200, 70, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_11,    560, 400, 200, 70, 0, 0x0, 0 },
 	{ BUTTON_CreateIndirect, "Button", ID_BUTTON_12,    800, 300, 100,170, 0, 0x0, 0 },
+
 };
 //实时显示智能垃圾桶内部参数的界面
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate_3[] = {
@@ -153,6 +157,7 @@ static void _cbDialog_1(WM_MESSAGE * pMsg);//界面1
 static void _cbDialog_2(WM_MESSAGE * pMsg);//界面2
 static void _cbDialog_3(WM_MESSAGE * pMsg);//界面3
 static void _cbDialog_4(WM_MESSAGE * pMsg);//界面4
+
 
 //界面1
 static void _cbDialog_1(WM_MESSAGE * pMsg) {
@@ -321,6 +326,8 @@ static void _cbDialog_2(WM_MESSAGE * pMsg)
 	  hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_12);
     BUTTON_SetFont(hItem, GUI_FONT_24_1);
 	  BUTTON_SetText(hItem, "Back");
+		
+
   
   case WM_NOTIFY_PARENT:
     Id    = WM_GetId(pMsg->hWinSrc);
@@ -491,14 +498,14 @@ static void _cbDialog_2(WM_MESSAGE * pMsg)
     case ID_BUTTON_11: // Notifications sent by 'Button'
       switch(NCode) {
 		  case WM_NOTIFICATION_CLICKED:
-
-					 checkfunction();
+            check_and_go();
+//					 checkfunction();
 			break;
 		  case WM_NOTIFICATION_RELEASED:
 			break;
       }
       break;
-		case ID_BUTTON_12: // Notifications sent by 'Button'
+		case ID_BUTTON_12: // Notifications sent by 'Button'  u3_printf("ok=%d\r\n",ID1);	//发送命令
       switch(NCode) {
 		  case WM_NOTIFICATION_CLICKED:
 				   GUI_EndDialog(pMsg->hWin, 0);	
@@ -514,6 +521,7 @@ static void _cbDialog_2(WM_MESSAGE * pMsg)
       break;
 	}
 	break;
+	
   default:
     WM_DefaultProc(pMsg);
     break;
@@ -786,6 +794,7 @@ static void _cbDialog_4(WM_MESSAGE * pMsg) {
 }
 /***********创建对话框***************/
 
+
 //创建界面1:
 WM_HWIN CreateFramewin_1(void) {
   WM_HWIN hWin;
@@ -817,18 +826,17 @@ WM_HWIN CreateFramewin_4(void) {
 void my_gui_create(void)
 {
 	WM_HWIN hWin;
+	GUI_Clear();
 	hWin=CreateFramewin_1();
 	while(1)
 	{
-		GUI_Delay(100);
+		GUI_Delay(1000);
 	}
 }
 
-
-void checkfunction(void)
+void check_and_go(void)
 {	
  int m,n,p;
-
  STMFLASH_Read(FLASH_PASSWORD_SAVE_ADDR,(u32*)Fraction,size_Fraction);
  if(Fraction[8]==0)
   {
@@ -850,6 +858,35 @@ void checkfunction(void)
         CreateFramewin_3();
 				for(n=0;n<11;n++)
 				{input_number[n]=0;}
+			}
+			else if(p<11) YES=1;
+     }
+	  }	
+   }
+  STMFLASH_Write(FLASH_PASSWORD_SAVE_ADDR,(u32*)Fraction,size_Fraction);
+}
+	
+void checkfunction(void)
+{	
+ int m,n,p;
+
+ STMFLASH_Read(FLASH_PASSWORD_SAVE_ADDR,(u32*)Fraction,size_Fraction);
+ if(Fraction[8]==0)
+  {
+	 Fraction[8]=1;
+	 STMFLASH_Write(FLASH_PASSWORD_SAVE_ADDR,(u32*)Fraction,size_Fraction);
+  }
+  for(m=0;m<8;m++)
+  {	 
+	 p=0;
+   for(n=0;n<11;n++)
+	  {	
+	   if( (input_number[n]-standard_pack[m][n])==0)
+	   {	
+      p++;
+      if(p==11)	    
+			{
+				ID2=m;
 			}
 			else if(p<11) YES=1;
      }

@@ -1,5 +1,6 @@
 #include "usart3.h"
 #include "tftlcd.h"
+#include "databox.h"
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //Èç¹ûÊ¹ÓÃos,Ôò°üÀ¨ÏÂÃæµÄÍ·ÎÄ¼þ¼´¿É.
 #if SYSTEM_SUPPORT_OS
@@ -20,6 +21,8 @@ u8 USART3_RX_BUF[USART3_MAX_RECV_LEN]; 				//½ÓÊÕ»º³å,×î´óUSART3_MAX_RECV_LEN¸ö×
 //[15]:0,Ã»ÓÐ½ÓÊÕµ½Êý¾Ý;1,½ÓÊÕµ½ÁËÒ»ÅúÊý¾Ý.
 //[14:0]:½ÓÊÕµ½µÄÊý¾Ý³¤¶È
 u16 USART3_RX_STA=0; 
+ DATABOX databox1;
+ DATABOX *sptr1=&databox1;
 UART_HandleTypeDef UART3_Handler; //UART¾ä±ú
 extern u8  interface;
 extern int acv_flag;
@@ -146,8 +149,11 @@ void USART1_IRQHandler(void)
 #endif
 } 
 
-u8 rev_account = 0,k,j;
+int rev_account = 0,R_flag;
 u8 my_result[22];
+
+ 
+
 void USART3_IRQHandler(void)
 {
 	u8 res;  	
@@ -170,29 +176,39 @@ void USART3_IRQHandler(void)
 			} 
 		}	
 	}  
-	if(acv_flag==1)
-	{		
-	 my_result[rev_account] = res; 	
-	 if(res=='r') 
-	  {  
-	 	 k=1;
-	  }
-	 if(res=='i') 
-	  {  
-		 j=1;
-	  }
-		if(k==1&&j==1)
+	 if(acv_flag==1)
+	 {		
+	  my_result[rev_account] = res; 	
+	  if(res==Rdata_tip) 
+	   {  
+	 	  R_flag=1;
+	   }
+	  else if(R_flag==1) 
+	   {  
+		 sptr1->funtion_part=my_result[rev_account];
+		 R_flag=2;	
+	   }
+		else if(R_flag==2)
+		{
+		 sptr1->data_length=(int)(my_result[rev_account]-'0');
+			 R_flag=3;
+		}
+		else if(R_flag==3)
+		{
+		 sptr1->address=my_result[rev_account];
+			 R_flag=4;
+		}
+		else if(R_flag==4)
 		{
 		rev_account++;	
-		if(rev_account>= 22 )
-	  {		
-		 rev_account = 0;	
-		 acv_flag= 2;
-		 k=2;
-		 j=2;
-    }	 				
-		}  
-	}  
+		if(rev_account >=(sptr1->data_length + 1))
+	   {		
+		  rev_account = 0;	
+		  acv_flag= 2;
+		  R_flag=0;
+     }	 				
+	  }  
+	 }  
  }
 
 
